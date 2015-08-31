@@ -1,0 +1,97 @@
+<!DOCTYPE HTML>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>Suppliers</title>
+		<link rel="stylesheet" href="css/base.css">
+		<link rel="stylesheet" href="css/bootstrap.min.css">
+	</head>
+	<body>
+		<div id="loader"></div>
+		<section id="suppliers">
+			<nav class="navbar navbar-inverse navbar-fixed-top">
+				<div class="container-fluid">
+					<div class="navbar-header">
+						<span class="navbar-brand">Suppliers</span>
+					</div>		
+				</div>
+			</nav>
+			<div id="message" class="alert alert-danger text-center navbar-fixed-top hidden">
+				<strong><span id="message-text"></span></strong>
+				<button type="button" class="close" data-dismiss="alert">&times;</button>
+			</div>
+			<div class="container-fluid">
+				<div class="row">
+					<div id="supplier-list-container" class="sidebar">
+						<div id="supplier-list" class="list-group">
+						</div>
+					</div>
+					<div id="supplier-view">
+					</div>
+				</div>
+			</div>
+		</section>
+	</body>
+	<script type="text/template" id="supplier-template">
+		<div id=<%=id%> class="supplier list-group-item">
+			<a href="#/<%=id%>">
+				<%= duns %>: <%= name %>
+			</a>
+			<div class="pull-right">
+				<span class="badge risk-<%=risk_level%>"><%=risk_score.risk_score.toFixed(2)%></span>
+				<span class="glyphicon glyphicon-star favorites <%= favorite ? "favorite": "" %> cursor-pointer" title="Add to favorites" aria-hidden="true"></span>
+			</div>
+		</div>
+	</script>
+	
+	<script type="text/template" id="supplier-details-template">
+		<h2 id="h<%=id%>">
+			<span>
+				<%= duns %>: <%= name %>
+				<span class="glyphicon glyphicon-star favorites <%= favorite ? "favorite": "" %> cursor-pointer" title="Add to favorites" aria-hidden="true"></span>
+			</span>
+		</h2>			
+		<h3>risk score: <%= risk_score.risk_score %></h3>
+		<p>
+			<%=address.address1%>
+			<%=address.address2 ? ',' + address.address2 : '' %>,
+			<%=address.zip_code%>,
+			<%=address.city%>
+		</p>
+		<% for (var i = 0; i < risk_score.risk_groups.length ; i++){ %>
+			<p>
+				<%=risk_score.risk_groups[i].name%> : <%=risk_score.risk_groups[i].risk_score%>
+			</p>
+		<% } %>
+		<span class="glyphicon glyphicon-chevron-left pull-left visible-xs-block btn-lg"></span>
+	</script>
+	
+	<script type="text/template" id="pagination-template">
+		<nav>
+			<ul class="pagination">
+				<li class="disabled">
+					<a aria-label="Previous"><span aria-hidden="true">&laquo;</span></a>
+				</li>
+				<% for (var i = 1; i <= nrOfPages ; i++) { %>
+					<li id="page<%=i%>" <%= i == 1 ? 'class="active"' : "" %>><a><%=i%></a></li>
+				<% } %>
+				<li <%= nrOfPages == 1 ? "class='disabled'" : "" %>>
+					<a aria-label="Next"><span aria-hidden="true">&raquo;</span></a>
+				</li>
+			</ul>
+		</nav>
+	</script>
+		
+	<script src="modules/jquery-1.11.3.min.js"></script>
+	<script src="modules/underscore-min.js"></script>
+	<script src="modules/backbone-min.js"></script>
+	<script src="modules/backbone.localStorage-min.js"></script>
+	<script src="modules/bootstrap.min.js"></script>
+	<script src="js/models/supplier.js"></script>
+	<script src="js/collections/suppliers.js"></script>
+	<script src="js/views/supplierView.js"></script>
+	<script src="js/views/suppliersView.js"></script>
+	<script src="js/routers/router.js"></script>
+	<script src="js/app.js"></script>
+</html>
